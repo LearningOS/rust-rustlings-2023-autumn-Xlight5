@@ -11,7 +11,6 @@
 // Execute `rustlings hint iterators5` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 use std::collections::HashMap;
 
@@ -20,6 +19,19 @@ enum Progress {
     None,
     Some,
     Complete,
+}
+
+fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
+    // map.values().filter(|&&val| val == value).count() // 这里的val是&&Progress类型，所以需要解引用两次
+    // 第二种方法
+    // iter()获取map的迭代器
+// filter()HashMap中第一个元素value相等的值
+// count()用来返回数量
+    map.iter().filter(|v| *v.1 == value).count()
+}
+
+fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
+    collection.iter().map(|map| count_iterator(map, value)).sum()
 }
 
 fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
@@ -32,30 +44,47 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
     count
 }
 
-fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
-    // map is a hashmap with String keys and Progress values.
-    // map = { "variables1": Complete, "from_str": None, ... }
-    todo!();
-}
+// fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
+//     // map is a hashmap with String keys and Progress values.
+//     // map = { "variables1": Complete, "from_str": None, ... }
+//     todo!();
+// }
 
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
-    let mut count = 0;
-    for map in collection {
-        for val in map.values() {
-            if val == &value {
-                count += 1;
-            }
-        }
-    }
-    count
+    // let mut count = 0;
+    // for map in collection {
+    //     for val in map.values() {
+    //         if val == &value {
+    //             count += 1;
+    //         }
+    //     }
+    // }
+    // count
+    // 第二种方法
+
+    let mut my_map1 = collection[0].clone();
+    let mut my_map2 = collection[1].clone();
+    // 调用extend方法，将my_map1转换为一个迭代器，并将其键值对添加到my_map2中
+    my_map2.extend(my_map1.into_iter());
+    // 与上一个相同
+    // let count11 = my_map1.iter().filter(|v| *v.1 == value).count();
+    // let count33 = my_map1.iter().filter(|v| *v.1 == Progress::Some).count();
+    // let count44 = my_map1.iter().filter(|v| *v.1 == Progress::None).count();
+
+    let count22 = my_map2.iter().filter(|v| v.1 == &value).count();
+    // let count55 = my_map2.iter().filter(|v| *v.1 == Progress::Some).count();
+    // let count66 = my_map2.iter().filter(|v| *v.1 == Progress::None).count();
+
+     count22
+
 }
 
-fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
-    // collection is a slice of hashmaps.
-    // collection = [{ "variables1": Complete, "from_str": None, ... },
-    //     { "variables2": Complete, ... }, ... ]
-    todo!();
-}
+// fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
+//     // collection is a slice of hashmaps.
+//     // collection = [{ "variables1": Complete, "from_str": None, ... },
+//     //     { "variables2": Complete, ... }, ... ]
+//     todo!();
+// }
 
 #[cfg(test)]
 mod tests {

@@ -8,21 +8,32 @@
 //
 // Execute `rustlings hint traits2` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
 
-trait AppendBar {
+trait AppendBar{
     fn append_bar(self) -> Self;
 }
 
 // TODO: Implement trait `AppendBar` for a vector of strings.
 
+impl AppendBar for Vec<String> {
+    fn append_bar(mut self) -> Self {
+        // let mut v = self;
+        self.push(String::from("Bar"));
+        self
+    }
+}
+
+
 #[cfg(test)]
 mod tests {
+    // use std::clone;
     use super::*;
 
     #[test]
     fn is_vec_pop_eq_bar() {
-        let mut foo = vec![String::from("Foo")].append_bar();
+        let mut a = vec![String::from("Foo")];
+        let mut foo = AppendBar::append_bar(a.clone());
+        let mut bar = a.append_bar();
         assert_eq!(foo.pop().unwrap(), String::from("Bar"));
         assert_eq!(foo.pop().unwrap(), String::from("Foo"));
     }
